@@ -21,17 +21,19 @@ class Questions {
         });
     }
 
-    askForPlayerNames() {
-
-    }
-
-    firstPlayersName() {
-
-    }
-
-    secondPlayersName() {
-
+    askForPlayerNames(playersArr, playerNumber, nextFunction) {
+        rl.question(`What is player ${playerNumber}'s name: `, (answer) => {
+            if (answer.trim() === '') {
+                console.log('Oops, did you mean to leave the players name blank? \n');
+                return questions.askForPlayerNames(playersArr, playerNumber, nextFunction);
+            }
+            
+            playersArr.push(answer);
+            nextFunction();
+        });
     }
 }
+
+const questions = new Questions();
 
 module.exports = Questions;

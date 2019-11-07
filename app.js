@@ -4,4 +4,6 @@ const start = new Start();
 const questions = new Questions();
 const myArgs = process.argv.slice(2);
 
-questions.confirmUserWantsToPlay(start.game);
+console.log(myArgs);
+
+questions.confirmUserWantsToPlay(start.game.bind(this, myArgs));
