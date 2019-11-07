@@ -10,7 +10,7 @@ if (myArgs[0] === undefined) {
     throw 'To start the game, please use "-f hands.txt" or "-h with 10 cards"';
 }
 
-if (myArgs[0] !== '-f' || myArgs[0] !== '-h') {
+if (myArgs[0] !== '-f' && myArgs[0] !== '-h') {
     throw `${myArgs[0]} is an unknown function. Please use "-f hands.txt" or "-h" with 10 cards`;
 }
 
