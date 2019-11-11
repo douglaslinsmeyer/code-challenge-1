@@ -142,7 +142,7 @@ const isFourOfAKind = function(hand) {
 }
 
 const isFullHouse = function(hand) {
-
+    return checkForPair(hand, 3);
 }
 
 const isAFlush = function(hand) {
@@ -168,7 +168,7 @@ const isThreeOfAKind = function(hand) {
 }
 
 const isTwoPair = function(hand) {
-    
+    return checkForMultiplePairs(hand, 2)
 }
 
 const isOnePair = function(hand) {
@@ -188,6 +188,33 @@ const checkForPair = function(hand, numberOfMatches) {
 
         if(hand.match(regExCard).length === numberOfMatches) {
             return true;
+        }
+    }
+
+    return false;
+}
+
+const checkForMultiplePairs = function(hand, twoOrFullHouse) {
+    let handArr = hand.split('');
+
+    for (let i = 0; i < handArr.length; i++) {
+        let card = handArr[i];
+        let regExCard = new RegExp(card,"g");
+
+        if(hand.match(regExCard).length === twoOrFullHouse) {
+            for (let i = 0; i < handArr.length; i++) {
+                let secondCard = handArr[i];
+
+                if (secondCard === card){
+
+                } else {
+                    let regExCard = new RegExp(card,"g");
+
+                    if(hand.match(regExCard).length === 2) {
+                        return true;
+                    }
+                }
+            }
         }
     }
 
