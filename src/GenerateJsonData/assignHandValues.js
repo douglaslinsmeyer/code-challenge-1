@@ -155,7 +155,6 @@ const isForRoyalFlush = function(hand) {
     return false;
 }
 
-
 const isStraightFlush = function(hand) {
     if (!isAFlush(hand)) {
         return false;
@@ -191,8 +190,31 @@ const isAFlush = function(hand) {
 }
 
 const isAStaight = function(hand) {
-    // TODO: Straight logic
-    return false;
+    let handArr = hand.split('');
+    let cardOneVal = cardValues(handArr[0]);
+    let cardTwoVal = cardValues(handArr[2]);
+    let cardThreeVal = cardValues(handArr[4]);
+    let cardFourVal = cardValues(handArr[6]);
+    let cardFiveVal = cardValues(handArr[8]);
+
+    function sortNumber(a, b) {
+        return a - b;
+    }
+
+    let orderedHandArr = [cardOneVal, cardTwoVal, cardThreeVal, cardFourVal, cardFiveVal].sort(sortNumber);
+
+    for (let i = 0; i < orderedHandArr.length; i++) {
+        let thisVal = orderedHandArr[i];
+        let nextVal = orderedHandArr[i+1]
+
+        if (thisVal !== (nextVal -1)) {
+            return false;
+        }
+
+        if (i === 3) {
+            return true;
+        }
+    }
 }
 
 const isThreeOfAKind = function(hand) {
@@ -294,32 +316,45 @@ const checkForMultiplePairs = function(hand, twoOrFullHouse) {
 }
 
 const cardValues = function(card) {
-    if (card === 'A')
-        return 15
-    if (card === 'K')
-        return 14
-    if (card === 'Q')
-        return 13
-    if (card === 'J') 
-        return 12
-    if (card === 'T')
-        return 10
-    if (card === '9')
-        return 9
-    if (card === '8')
-        return 8
-    if (card === '7') 
-        return 7
-    if (card === '6')
-        return 6
-    if (card === '5') 
-        return 5
-    if (card === '4')
-        return 4
-    if (card === '3')
-        return 3
-    if (card === '2')
-        return 2
+    if (card === 'A') {
+        return 14;
+    }
+    if (card === 'K') {
+        return 13;
+    }
+    if (card === 'Q') {
+        return 12;
+    }
+    if (card === 'J') {
+        return 11;
+    }
+    if (card === 'T') {
+        return 10;
+    }
+    if (card === '9') {
+        return 9;
+    }
+    if (card === '8') {
+        return 8;
+    }
+    if (card === '7') {
+        return 7;
+    }
+    if (card === '6') {
+        return 6;
+    }
+    if (card === '5') {
+        return 5;
+    }
+    if (card === '4') {
+        return 4;
+    }
+    if (card === '3') {
+        return 3;
+    }
+    if (card === '2') {
+        return 2;
+    }
 
     return 0;
 }
