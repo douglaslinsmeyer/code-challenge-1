@@ -2,13 +2,6 @@ const Questions = require('./Questions');
 const questions = new Questions();
 const readline = require('readline');
 const fs = require('fs');
-var jsdom = require('jsdom');
-const { JSDOM } = jsdom;
-const { window } = new JSDOM();
-const { document } = (new JSDOM('')).window;
-global.document = document;
-
-var $ = jQuery = require('jquery')(window);
 
 class PokerFunction {
     letsBegin(playersArr, myArgs) {
@@ -54,9 +47,11 @@ class PokerFunction {
         const handArray = hand.split('');
         const lastTwoCards = handArray[6] + handArray[7] + handArray[8] + handArray[9];
 
-        $.getJSON(`./HandCombinations/${lastTwoCards}.json`, function(data) {
-            console.log(data.combinations[hand]);
-        })
+        let json = JSON.parse(fs.readFileSync(`./HandCombinations/${lastTwoCards}.json`).toString());
+        return json.combinations[hand];
+        // var handObj = require(`../HandCombinations/${lastTwoCards}.json`).combinations[hand];
+        // return handObj;
+
     }
 
     loopThroughFindHandValues() {
