@@ -1,7 +1,5 @@
 const myArgs = process.argv.slice(2);
 
-console.log(myArgs);
-
 if (myArgs[0] === undefined) {
     throw 'To start the game, please use "-f hands.txt" or "-h with 10 cards"';
 }

@@ -32,6 +32,32 @@ class Questions {
             nextFunction();
         });
     }
+
+    howDoYouWantToPlay(yesFunction, noFunction) {
+        rl.question('Last question, Do you want to play with the hands.txt file? (y/n): ', (answer) => {
+            if (answer !== 'y' && answer !== 'n' ) {
+                console.log(`${answer} is not an acceptable answer. Please try with a y (for yes) or n for (no).`);
+                return questions.howDoYouWantToPlay(yesFunction, noFunction);
+            }
+
+            if (answer === 'y') {
+                return yesFunction();
+            }
+            
+            return noFunction();
+        });
+    }
+
+    enterTenCards(nextFunction, playersArr) {
+        rl.question('Enter 10 cards with space seperating them. (ie: AH 5D 7S 9C...): ', (answer) => {
+            if (answer.split(' ').length !== 10) {
+                console.log("Oops, it doesn't look like you entered ten cards \n");
+                return questions.enterTenCards(nextFunction, playersArr);
+            }
+            
+            nextFunction(answer, playersArr);
+        });
+    }
 }
 
 const questions = new Questions();

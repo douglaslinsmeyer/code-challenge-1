@@ -1,32 +1,67 @@
+const Questions = require('./Questions');
+const questions = new Questions();
 const readline = require('readline');
 const fs = require('fs');
+var jsdom = require('jsdom');
+const { JSDOM } = jsdom;
+const { window } = new JSDOM();
+const { document } = (new JSDOM('')).window;
+global.document = document;
+
+var $ = jQuery = require('jquery')(window);
 
 class PokerFunction {
     letsBegin(playersArr, myArgs) {
-        console.log(playersArr);
-        console.log(myArgs[1]);
-
-        pokerFunction.readFile(myArgs[1], pokerFunction.readFileHandler)
+        questions.howDoYouWantToPlay(
+            pokerFunction.readFile.bind(this, myArgs[1], pokerFunction.readFileHandler, playersArr, pokerFunction.lookupTable),
+            questions.enterTenCards.bind(this, pokerFunction.readFileHandler, playersArr)
+        );
     }
 
-    readFile(file, handler) {
+    readFile(file, handler, playersArr, callback) {
         const readInterface = readline.createInterface({
             input: fs.createReadStream(file),
             output: process.stdout,
-            console: false
         });
 
         readInterface.on('line', function(line) {
-            handler(line);
+            handler(line, playersArr, callback);
         });
     }
 
-    readFileHandler(line) {
-        const cardsArrary = line.split(' ');
-        console.log(cardsArrary);
+    readFileHandler(line, playersArr, callback) {
+        const handArray = line.split(' ');
+        const playerOneHand = handArray[0] + handArray[1] + handArray[2] + handArray[3] + handArray[4];
+        const playerTwoHand = handArray[5] + handArray[6] + handArray[7] + handArray[8] + handArray[9];
+        // not working
+        console.log(callback(playerOneHand));
     }
 
+    compareHands(playerOne, playerTwo, handOne, handTwo, functionChoice) {
+        const handOneObject = pokerFunction.functionChoice(handOne);
+        const handTwoObject = pokerFunction.functionChoice(handTwo);
 
+        if (handOneObject.value > handTwoObject.value) {
+            console.log(`${playerOne} wins with ${handOneObject.name}.`);
+        } else if (handOneObject.value < handTwoObject.value) {
+            console.log(`${playerTwo} wins with ${handTwoObject.name}.`);
+        } else {
+            console.log(`${playerOne} and ${playerTwo} tie with ${handTwoObject.name}.`);
+        }
+    }
+
+    lookupTable(hand){
+        const handArray = hand.split('');
+        const lastTwoCards = handArray[6] + handArray[7] + handArray[8] + handArray[9];
+
+        $.getJSON(`./HandCombinations/${lastTwoCards}.json`, function(data) {
+            console.log(data.combinations[hand]);
+        })
+    }
+
+    loopThroughFindHandValues() {
+
+    }
 }
 
 const pokerFunction = new PokerFunction();
