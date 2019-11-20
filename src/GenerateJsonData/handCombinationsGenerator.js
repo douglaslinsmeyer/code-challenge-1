@@ -1,3 +1,4 @@
+const handValue = require('./assignHandValues');
 const fs = require('fs');
 
 const cards = ['2D', '3D', '4D', '5D', '6D', '7D', '8D', '9D', 'TD', 'JD', 'QD', 'KD', 'AD', '2H', '3H', '4H', '5H', '6H', '7H', '8H', '9H', 'TH', 'JH', 'QH', 'KH', 'AH', '2C', '3C', '4C', '5C', '6C', '7C', '8C', '9C', 'TC', 'JC', 'QC', 'KC', 'AC', '2S', '3S', '4S', '5S', '6S', '7S', '8S', '9S', 'TS', 'JS', 'QS', 'KS', 'AS'];
@@ -15,7 +16,6 @@ const handCombinationsGenerator = function(twoCards) {
     for (let i = 0; i < deck.length; i++) {
         let deckCard = deck[i];
         let tempArray = [];
-        let tempObj = {};
 
         for (let j = 0; j < deckCard.length; j++) {
             let cardToAdd = deckCard[j];
@@ -32,8 +32,12 @@ const handCombinationsGenerator = function(twoCards) {
                         if (combination.length < 4){
                             tempArray.push(combination + cardToAdd);
                         } else {
-                            
-                            tempArray.push(combination + cardToAdd + twoCards);
+
+                            let tempObj = {};
+                            let hand = combination + cardToAdd + twoCards;
+                            let cardValues = handValue.assignHandValue(hand);
+                            tempObj[hand] = cardValues;
+                            tempArray.push(tempObj);
 
                         }
                     }
@@ -50,11 +54,11 @@ const handCombinationsGenerator = function(twoCards) {
     });
     //return combinations;
 };
-// for (let i = 0; i < twoCardCombos.length; i++) {
-//     if (i >= 0 && i < 200) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
+for (let i = 0; i < twoCardCombos.length; i++) {
+    if (i >= 150 && i < 200) {
+        handCombinationsGenerator(twoCardCombos[i]);
+    }
+}
 // for (let i = 200; i < twoCardCombos.length; i++) {
 //     if (i >= 200 && i < 400) {
 //         handCombinationsGenerator(twoCardCombos[i]);
@@ -115,8 +119,8 @@ const handCombinationsGenerator = function(twoCards) {
 //         handCombinationsGenerator(twoCardCombos[i]);
 //     }
 // }
-for (let i = 2600; i < twoCardCombos.length; i++) {
-    if (i >= 2600 && i < 2800) {
-        handCombinationsGenerator(twoCardCombos[i]);
-    }
-}
+// for (let i = 2600; i < twoCardCombos.length; i++) {
+//     if (i >= 2600 && i < 2800) {
+//         handCombinationsGenerator(twoCardCombos[i]);
+//     }
+// }
