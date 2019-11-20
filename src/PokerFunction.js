@@ -47,9 +47,7 @@ class PokerFunction {
         const lastTwoCards = handArray[6] + handArray[7] + handArray[8] + handArray[9];
 
         let json = JSON.parse(fs.readFileSync(`./HandCombinations/${lastTwoCards}.json`).toString());
-        console.log(json.combinations[hand]);
-        // var handObj = require(`../HandCombinations/${lastTwoCards}.json`).combinations[hand];
-        // return handObj;
+        return json.combinations[hand];
 
     }
 
