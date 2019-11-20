@@ -1,3 +1,4 @@
+const myArgs = process.argv.slice(2);
 const handValue = require('./assignHandValues');
 const fs = require('fs');
 
@@ -54,73 +55,12 @@ const handCombinationsGenerator = function(twoCards) {
     });
     //return combinations;
 };
+const min = myArgs[0];
+const max = myArgs[1];
+
 for (let i = 0; i < twoCardCombos.length; i++) {
-    if (twoCardCombos[i] === '7CTC') {
+    if (i >= min && i < max) {
         handCombinationsGenerator(twoCardCombos[i]);
     }
 }
-// for (let i = 200; i < twoCardCombos.length; i++) {
-//     if (i >= 200 && i < 400) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 400; i < twoCardCombos.length; i++) {
-//     if (i >= 400 && i < 600) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 600; i < twoCardCombos.length; i++) {
-//     if (i >= 600 && i < 800) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 800; i < twoCardCombos.length; i++) {
-//     if (i >= 800 && i < 1000) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 1000; i < twoCardCombos.length; i++) {
-//     if (i >= 1000 && i < 1200) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 1200; i < twoCardCombos.length; i++) {
-//     if (i >= 1200 && i < 1400) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 1400; i < twoCardCombos.length; i++) {
-//     if (i >= 1400 && i < 1600) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 1600; i < twoCardCombos.length; i++) {
-//     if (i >= 1600 && i < 1800) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 1800; i < twoCardCombos.length; i++) {
-//     if (i >= 1800 && i < 2000) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 2000; i < twoCardCombos.length; i++) {
-//     if (i >= 2000 && i < 2200) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 2200; i < twoCardCombos.length; i++) {
-//     if (i >= 2200 && i < 2400) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 2400; i < twoCardCombos.length; i++) {
-//     if (i >= 2400 && i < 2600) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
-// for (let i = 2600; i < twoCardCombos.length; i++) {
-//     if (i >= 2600 && i < 2800) {
-//         handCombinationsGenerator(twoCardCombos[i]);
-//     }
-// }
+

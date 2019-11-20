@@ -48,7 +48,6 @@ class PokerFunction {
 
         let json = JSON.parse(fs.readFileSync(`./HandCombinations/${lastTwoCards}.json`).toString());
         return json.combinations[hand];
-
     }
 
     loopThroughFindHandValues() {
