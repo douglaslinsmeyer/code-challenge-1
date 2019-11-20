@@ -13,8 +13,7 @@ class PokerFunction {
 
     readFile(file, handler, playersArr, callback) {
         const readInterface = readline.createInterface({
-            input: fs.createReadStream(file),
-            output: process.stdout,
+            input: fs.createReadStream(file)
         });
 
         readInterface.on('line', function(line) {
@@ -26,8 +25,8 @@ class PokerFunction {
         const handArray = line.split(' ');
         const playerOneHand = handArray[0] + handArray[1] + handArray[2] + handArray[3] + handArray[4];
         const playerTwoHand = handArray[5] + handArray[6] + handArray[7] + handArray[8] + handArray[9];
-        // not working
         console.log(callback(playerOneHand));
+        console.log(callback(playerTwoHand));
     }
 
     compareHands(playerOne, playerTwo, handOne, handTwo, functionChoice) {
@@ -48,7 +47,7 @@ class PokerFunction {
         const lastTwoCards = handArray[6] + handArray[7] + handArray[8] + handArray[9];
 
         let json = JSON.parse(fs.readFileSync(`./HandCombinations/${lastTwoCards}.json`).toString());
-        return json.combinations[hand];
+        console.log(json.combinations[hand]);
         // var handObj = require(`../HandCombinations/${lastTwoCards}.json`).combinations[hand];
         // return handObj;
 
