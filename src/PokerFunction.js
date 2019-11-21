@@ -5,41 +5,52 @@ const fs = require('fs');
 
 class PokerFunction {
     letsBegin(playersArr, myArgs) {
+        let wins = {
+            playerOneWins: 0,
+            playerTwoWins: 0,
+        }
+
         questions.howDoYouWantToPlay(
-            pokerFunction.readFile.bind(this, myArgs[1], pokerFunction.readFileHandler, playersArr, pokerFunction.lookupTable),
+            pokerFunction.readFile.bind(this, myArgs[1], pokerFunction.readFileHandler, playersArr, pokerFunction.lookupTable, wins),
             questions.enterTenCards.bind(this, pokerFunction.readFileHandler, playersArr)
         );
     }
 
-    readFile(file, handler, playersArr, callback) {
+    readFile(file, handler, playersArr, callback, wins) {
         const readInterface = readline.createInterface({
             input: fs.createReadStream(file)
         });
 
         readInterface.on('line', function(line) {
-            handler(line, playersArr, callback);
+            handler(line, playersArr, callback, wins);
         });
     }
 
-    readFileHandler(line, playersArr, callback) {
+    readFileHandler(line, playersArr, callback, wins) {
         const handArray = line.split(' ');
         const playerOneHand = handArray[0] + handArray[1] + handArray[2] + handArray[3] + handArray[4];
         const playerTwoHand = handArray[5] + handArray[6] + handArray[7] + handArray[8] + handArray[9];
-        console.log(callback(playerOneHand));
-        console.log(callback(playerTwoHand));
+        console.log(pokerFunction.compareHands(playersArr[0], playersArr[1], playerOneHand, playerTwoHand, callback, wins));
     }
 
-    compareHands(playerOne, playerTwo, handOne, handTwo, functionChoice) {
-        const handOneObject = pokerFunction.functionChoice(handOne);
-        const handTwoObject = pokerFunction.functionChoice(handTwo);
+    compareHands(playerOne, playerTwo, handOne, handTwo, functionChoice, wins) {
+        const handOneObject = functionChoice(handOne);
+        const handTwoObject = functionChoice(handTwo);
 
         if (handOneObject.value > handTwoObject.value) {
-            console.log(`${playerOne} wins with ${handOneObject.name}.`);
-        } else if (handOneObject.value < handTwoObject.value) {
-            console.log(`${playerTwo} wins with ${handTwoObject.name}.`);
-        } else {
-            console.log(`${playerOne} and ${playerTwo} tie with ${handTwoObject.name}.`);
+            console.log(`\n${playerOne} wins with ${handOneObject.name}.`);
+            return `${playerOne}: ${wins.playerOneWins++} wins || ${playerTwo}: ${wins.playerTwoWins} wins`;
+
         }
+        
+        if (handOneObject.value < handTwoObject.value) {
+            console.log(`\n${playerTwo} wins with ${handTwoObject.name}.`);
+            return `${playerOne}: ${wins.playerOneWins} wins || ${playerTwo}: ${wins.playerTwoWins++} wins`;
+
+        }
+        console.log(`\n${playerOne} and ${playerTwo} tie with ${handTwoObject.name}.`);
+        return `${playerOne}: ${wins.playerOneWins} wins || ${playerTwo}: ${wins.playerTwoWins} wins`;
+
     }
 
     lookupTable(hand){

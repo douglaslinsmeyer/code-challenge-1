@@ -31,43 +31,55 @@ const samples = [
 
 exports.assignHandValue = function(hand) {
     if (isForRoyalFlush(hand)) {
-        return findHighCard(hand, 649740, "royal flush");
+        return { 'value': 10000000000000, 'name': 'royal flush' }
     }
 
     if (isStraightFlush(hand)) {
-        return findHighCard(hand, 72192, "straight flush");
+        return findHighCard(hand, 900000000000, "straight flush");
     }
 
     if (isFourOfAKind(hand)) {
-        return findHighCard(hand, 4165, "four of a kind");
+        let value = 800000000000;
+        //find card value of pair && one highest
+        return findHighCard(hand, value, "four of a kind");
     }
 
     if (isFullHouse(hand)) {
-        return findHighCard(hand, 693, "full house");
+        let value = 700000000000;
+        //find card value of first 3, then 2
+        return findHighCard(hand, value, "full house");
     }
 
     if (isAFlush(hand)) {
-        return findHighCard(hand, 508, "flush");
+        let value = 600000000000;
+        //find five highest cards
+        return findHighCard(hand, value, "flush");
     }
 
     if (isAStaight(hand)) {
-        return findHighCard(hand, 254, "straight");
+        return findHighCard(hand, 500000000000, "straight");
     }
 
     if (isThreeOfAKind(hand)) {
-        return findHighCard(hand, 136, "three of a kind");
+        let value = 400000000000;
+        //find card value of pair
+        return findHighCard(hand, value, "three of a kind");
     }
 
     if (isTwoPair(hand)) {
-        return findHighCard(hand, 52, "two pair");
+        let value = 300000000000;
+        //find card value of pair
+        return findHighCard(hand, value, "two pair");
     }
 
     if (isOnePair(hand)) {
-        return findHighCard(hand, 20, "pair");
+        let value = 200000000000;
+        //find card value of pair
+        return findHighCard(hand, value, "pair");
     }
-
-    return findHighCard(hand, 0, "high card");
-
+    let value = 100000000000;
+    //find five highest cards
+    return findHighCard(hand, value, "high card");
 }
 
 const isForRoyalFlush = function(hand) {
@@ -191,14 +203,15 @@ const findHighCard = function(hand, exsistingValue, handName) {
             i !== 4 &&
             i !== 6 &&
             i !== 6 
-            ){} else {
-                let cardValue = cardValues(handArr[i]);
+            ) {continue;}
 
-                if (cardValue > highCard) {
-                    highCard = cardValue;
-                }
+            let cardValue = cardValues(handArr[i]);
+
+            if (cardValue > highCard) {
+                highCard = cardValue;
             }
     }
+
     highCard += exsistingValue
     return { 'value': highCard, 'name': handName } ;
 }
@@ -268,44 +281,42 @@ const checkForMultiplePairs = function(hand, twoOrFullHouse) {
 
 const cardValues = function(card) {
     if (card === 'A') {
-        return 14;
-    }
-    if (card === 'K') {
         return 13;
     }
-    if (card === 'Q') {
+    if (card === 'K') {
         return 12;
     }
-    if (card === 'J') {
+    if (card === 'Q') {
         return 11;
     }
-    if (card === 'T') {
+    if (card === 'J') {
         return 10;
     }
-    if (card === '9') {
+    if (card === 'T') {
         return 9;
     }
-    if (card === '8') {
+    if (card === '9') {
         return 8;
     }
-    if (card === '7') {
+    if (card === '8') {
         return 7;
     }
-    if (card === '6') {
+    if (card === '7') {
         return 6;
     }
-    if (card === '5') {
+    if (card === '6') {
         return 5;
     }
-    if (card === '4') {
+    if (card === '5') {
         return 4;
     }
-    if (card === '3') {
+    if (card === '4') {
         return 3;
     }
-    if (card === '2') {
+    if (card === '3') {
         return 2;
     }
-
-    return 0;
+    if (card === '2') {
+        return 1;
+    }
 }

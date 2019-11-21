@@ -19,6 +19,7 @@ for (let i = 0; i < twoCardCombos.length; i++) {
 
             fs.writeFile(`./HandCombinations/${twoCardCombos[i]}.json`, result3, 'utf8', function (err) {
                 if (err) return console.log(err);
+                console.log(`${twoCardCombos[i]} Saved`);
             });
         });
     }
