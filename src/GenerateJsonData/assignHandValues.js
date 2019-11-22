@@ -44,8 +44,7 @@ exports.assignHandValue = function(hand) {
 
     if (isAFlush(hand)) {
         let value = 60000000000;
-        //sort & find five highest cards
-        return findHighCard(hand, value, "flush");
+        return { 'value': assignMultipleCardValues(hand, "none", ) + value, 'name': 'flush' };
     }
 
     if (isAStaight(hand)) {
@@ -54,8 +53,7 @@ exports.assignHandValue = function(hand) {
 
     if (isThreeOfAKind(hand)) {
         let value = 40000000000;
-        //find card value of pair & two remaining cards
-        return findHighCard(hand, value, "three of a kind");
+        return { 'value': returnPairValue(hand, 3, value), 'name': 'three of a kind' };
     }
 
     if (isTwoPair(hand)) {
@@ -66,13 +64,11 @@ exports.assignHandValue = function(hand) {
 
     if (isOnePair(hand)) {
         let value = 20000000000;
-        //find card value of pair and three remaing cards
-        return findHighCard(hand, value, "pair");
+        return { 'value': returnPairValue(hand, 2, value), 'name': 'pair' };
     }
 
     let value = 10000000000;
-    //sort & find five highest cards
-    return findHighCard(hand, value, "high card");
+    return { 'value': assignMultipleCardValues(hand, "none") + value, 'name': 'high card' };
 }
 
 const isForRoyalFlush = function(hand) {
@@ -194,11 +190,10 @@ const findHighCard = function(hand, exsistingValue, handName) {
     let cardFiveVal = cardValues(handArr[8]);
 
     function sortNumber(a, b) {
-        return a - b;
+        return b - a;
     }
     
-    let orderedHandArr = [cardOneVal, cardTwoVal, cardThreeVal, cardFourVal, cardFiveVal].sort(sortNumber);    
-
+    let orderedHandArr = [cardOneVal, cardTwoVal, cardThreeVal, cardFourVal, cardFiveVal].sort(sortNumber);
     let highCard = exsistingValue + orderedHandArr[0];
     return { 'value': highCard, 'name': handName };
 }
@@ -290,8 +285,58 @@ const assignPairValue = function(hand, numberOfMatches, multiplier) {
     }
 }
 
-const assignMultiplePairsValue = function(hand, twoOrFullHouse) {
+const assignMultipleCardValues = function(hand, excludeCard) {
     let handArr = hand.split('');
+    let excludeCardValue = cardValues(excludeCard);
+    let multiplier = 1;
+    let cardOneVal = cardValues(handArr[0]);
+    let cardTwoVal = cardValues(handArr[2]);
+    let cardThreeVal = cardValues(handArr[4]);
+    let cardFourVal = cardValues(handArr[6]);
+    let cardFiveVal = cardValues(handArr[8]);
+
+    let cardsWithoutSewtsArr = [cardOneVal, cardTwoVal, cardThreeVal, cardFourVal, cardFiveVal];
+
+    if ( excludeCardValue !== undefined) {
+        let tempArr = cardsWithoutSewtsArr.filter(
+            function(a) {
+                return a !== excludeCardValue;
+        });
+        cardsWithoutSewtsArr = tempArr;
+    }
+
+    function sortNumber(a, b) {
+        return a - b;
+    }
+    
+    let orderedHandArr = cardsWithoutSewtsArr.sort(sortNumber);
+    let cardsValues = 0;
+
+    for (let i = 0; i < orderedHandArr.length; i++) {
+        if (i === 0) {
+            multiplier = 1;
+        }
+        if (i === 1) {
+            multiplier = 100;
+        }
+        if (i === 2) {
+            multiplier = 10000;
+        }
+        if (i === 3) {
+            multiplier = 1000000;
+        }
+        if (i === 4) {
+            multiplier = 100000000;
+        }
+
+        cardsValues += (orderedHandArr[i] * multiplier);
+    }
+    return cardsValues;
+}
+
+const returnPairValue = function(hand, numberOfMatches, value) {
+    let handArr = hand.split('');
+    let excludeCards = '';
 
     for (let i = 0; i < handArr.length; i++) {
         if (
@@ -300,36 +345,18 @@ const assignMultiplePairsValue = function(hand, twoOrFullHouse) {
             i !== 4 &&
             i !== 6 &&
             i !== 6 
-            ) {continue;}
+        ) {continue;}
 
-            let card = handArr[i];
-            let regExCard = new RegExp(card,"g");
+        let card = handArr[i];
+        let regExCard = new RegExp(card,"g");
 
-            if(hand.match(regExCard).length === twoOrFullHouse) {
-                for (let i = 0; i < handArr.length; i++) {
-                    let secondCard = handArr[i];
-                    if (
-                        i !== 0 &&
-                        i !== 2 &&
-                        i !== 4 &&
-                        i !== 6 &&
-                        i !== 6 
-                        ) {continue;} 
-
-                        if (secondCard === card) {
-                            continue;
-                        }
-
-                        let secondRegExCard = new RegExp(secondCard,"g");
-
-                        if(hand.match(secondRegExCard).length === 2) {
-                            return true;
-                        }
-                    }
-            }
+        if(hand.match(regExCard).length === numberOfMatches) {
+            excludeCards = card;
+            value += assignPairValue(hand, numberOfMatches, 100000000);
+        }
     }
 
-    return false;
+    return assignMultipleCardValues(hand, excludeCards) + value;
 }
 
 const cardValues = function(card) {
