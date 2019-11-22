@@ -1,83 +1,76 @@
 const samples = [
-    'AHKHQHJHTH','9SKSQSJSTS',
-    '2H7D2S2D2C','8H6S6D6H8D',
-    '4H8H2H5H9H','6HTD6DKS6C',
-    '8CTSKC9H4S','7D2S5D3SAC',
-    '5CAD5DAC9C','7C5H8DTDKS',
-    '3H7H6SKCJS','QHTDJC2D8S',
-    'TH8H5CQSTC','9H4DJCKSJS',
-    '7C5HKCQHJD','ASKH4CAD4S',
-    '5HKS9C7D9H','8D3S5D5CAH',
-    '6H4H5C3H2H','3SQH5S6SAS',
-    'TD8C4H7CTC','KC4C3H7SKS',
-    '7C9C6DKD3H','4CQSQCACKH',
-    'JC6S5H2H2D','KD9D7CASJS',
-    'ADQHTH9D8H','TS6D3SASAC',
-    '2H4S5C5STC','KCJD6CTS3C',
-    'QDAS6HJS2C','3D9HKC4H8S',
-    'KD8S9S7C2S','3S6D6S4HKC',
-    '3C8C2D7D4D','9S4SQH4HJD',
-    '8CKC7STC2D','TS8HQDAC5C',
-    '3DKHQD6C6S','ADAS8H2HQS',
-    '6S8D4C8S6C','QHTC6D7D9D',
-    '2S8D8C4CTS','9S9D9CAC3D',
-    '3CQS2S4HJH','3D2DTD8S9H',
-    '5HQS8S6D3C','8CJDAS7H7D',
-    '6HTD9DASJH','6CQC9SKDJC',
-    'AH8SQS4DTH','ACTS3C3D5C',
-    '5S4DJS3D8H','6CTS3SAD8C',
-    '6D7C5D5H3S','5CJC2H5S3D'
+    'AHKHQHJHTH',
+    '9SKSQSJSTS',
+    '2H7D2S2D2C',
+    '8H6S6D6H8D',
+    '4H8H2H5H9H',
+    '6H7D8S9CTH',
+    'QCQSKCQH4S',
+    '7D7S5D5SAC',
+    '5C5D6DAC9C',
+    '7C5H8DTDKS',
+    '7C5H8DTDKS',
+    '5C5D6DAC9C',
+    '7D7S5D5SAC',
+    '8C8SKC8H4S',
+    '6H7D8S9CTH',
+    '4H8H2H5H9H',
+    '8H6S6D6H8D',
+    '2H7D2S2D2C',
+    '9SKSQSJSTS',
+    'AHKHQHJHTH'
 ]
 
 exports.assignHandValue = function(hand) {
     if (isForRoyalFlush(hand)) {
-        return { 'value': 10000000000000, 'name': 'royal flush' }
+        return { 'value': 100000000000, 'name': 'royal flush' }
     }
 
     if (isStraightFlush(hand)) {
-        return findHighCard(hand, 900000000000, "straight flush");
+        return findHighCard(hand, 90000000000, "straight flush");
     }
 
     if (isFourOfAKind(hand)) {
-        let value = 800000000000;
-        //find card value of pair && one highest
-        return findHighCard(hand, value, "four of a kind");
+        let value = 80000000000;
+        let pairValue = assignPairValue(hand, 4, 100) + value;
+        return findHighCard(hand, pairValue, "four of a kind");
     }
 
     if (isFullHouse(hand)) {
-        let value = 700000000000;
-        //find card value of first 3, then 2
-        return findHighCard(hand, value, "full house");
+        let value = 70000000000;
+        let threePairValue = assignPairValue(hand, 3, 10000) + value;
+        let pairValue = assignPairValue(hand, 2, 100) + threePairValue;
+        return findHighCard(hand, pairValue, "full house");
     }
 
     if (isAFlush(hand)) {
-        let value = 600000000000;
+        let value = 60000000000;
         //find five highest cards
         return findHighCard(hand, value, "flush");
     }
 
     if (isAStaight(hand)) {
-        return findHighCard(hand, 500000000000, "straight");
+        return findHighCard(hand, 50000000000, "straight");
     }
 
     if (isThreeOfAKind(hand)) {
-        let value = 400000000000;
+        let value = 40000000000;
         //find card value of pair
         return findHighCard(hand, value, "three of a kind");
     }
 
     if (isTwoPair(hand)) {
-        let value = 300000000000;
-        //find card value of pair
+        let value = 30000000000;
+        //find card value of pair and second pair
         return findHighCard(hand, value, "two pair");
     }
 
     if (isOnePair(hand)) {
-        let value = 200000000000;
+        let value = 20000000000;
         //find card value of pair
         return findHighCard(hand, value, "pair");
     }
-    let value = 100000000000;
+    let value = 10000000000;
     //find five highest cards
     return findHighCard(hand, value, "high card");
 }
@@ -279,6 +272,28 @@ const checkForMultiplePairs = function(hand, twoOrFullHouse) {
     return false;
 }
 
+const assignPairValue = function(hand, numberOfMatches, multiplier) {
+    let handArr = hand.split('');
+
+    for (let i = 0; i < handArr.length; i++) {
+        if (
+            i !== 0 &&
+            i !== 2 &&
+            i !== 4 &&
+            i !== 6 &&
+            i !== 6 
+        ){} else {
+            let card = handArr[i];
+            let regExCard = new RegExp(card,"g");
+
+            if(hand.match(regExCard).length === numberOfMatches) {
+                let pairValue = hand.match(regExCard)[0];
+                return cardValues(pairValue) * multiplier;
+            }
+        }
+    }
+}
+
 const cardValues = function(card) {
     if (card === 'A') {
         return 13;
@@ -319,4 +334,8 @@ const cardValues = function(card) {
     if (card === '2') {
         return 1;
     }
+}
+
+for (let i = 0; i < samples.length; i++) {
+    console.log(this.assignHandValue(samples[i]));
 }

@@ -2,11 +2,7 @@
 
 * Ensure you have Node installed on your machine
 * To start the app run "node app.js -f hands.txt"
-    * Algorithm was not fully completed before 11/22 deadline. 
-
-I decided to pre-render all possible hand combinaitons in the file HandCombinations. There are 2600 files, the file names are the last two cards of a combo. Each file contains over 150K different hands. 
-
-This way when the app runs, it only needs to do a look up instead of run through the algorithm.
+    * 
 
 # The Challenge
 
