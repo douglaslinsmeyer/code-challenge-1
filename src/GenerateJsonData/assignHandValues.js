@@ -39,13 +39,12 @@ exports.assignHandValue = function(hand) {
     if (isFullHouse(hand)) {
         let value = 70000000000;
         let threePairValue = assignPairValue(hand, 3, 10000) + value;
-        let pairValue = assignPairValue(hand, 2, 100) + threePairValue;
-        return findHighCard(hand, pairValue, "full house");
+        return { 'value': assignPairValue(hand, 2, 100) + threePairValue, 'name': 'full house' };
     }
 
     if (isAFlush(hand)) {
         let value = 60000000000;
-        //find five highest cards
+        //sort & find five highest cards
         return findHighCard(hand, value, "flush");
     }
 
@@ -55,23 +54,24 @@ exports.assignHandValue = function(hand) {
 
     if (isThreeOfAKind(hand)) {
         let value = 40000000000;
-        //find card value of pair
+        //find card value of pair & two remaining cards
         return findHighCard(hand, value, "three of a kind");
     }
 
     if (isTwoPair(hand)) {
         let value = 30000000000;
-        //find card value of pair and second pair
+        //find card value of pair, second pair and high card
         return findHighCard(hand, value, "two pair");
     }
 
     if (isOnePair(hand)) {
         let value = 20000000000;
-        //find card value of pair
+        //find card value of pair and three remaing cards
         return findHighCard(hand, value, "pair");
     }
+
     let value = 10000000000;
-    //find five highest cards
+    //sort & find five highest cards
     return findHighCard(hand, value, "high card");
 }
 
@@ -187,26 +187,20 @@ const isOnePair = function(hand) {
 
 const findHighCard = function(hand, exsistingValue, handName) {
     let handArr = hand.split('');
-    let highCard = 0;
+    let cardOneVal = cardValues(handArr[0]);
+    let cardTwoVal = cardValues(handArr[2]);
+    let cardThreeVal = cardValues(handArr[4]);
+    let cardFourVal = cardValues(handArr[6]);
+    let cardFiveVal = cardValues(handArr[8]);
 
-    for (let i = 0; i < handArr.length; i++) {
-        if (
-            i !== 0 &&
-            i !== 2 &&
-            i !== 4 &&
-            i !== 6 &&
-            i !== 6 
-            ) {continue;}
-
-            let cardValue = cardValues(handArr[i]);
-
-            if (cardValue > highCard) {
-                highCard = cardValue;
-            }
+    function sortNumber(a, b) {
+        return a - b;
     }
+    
+    let orderedHandArr = [cardOneVal, cardTwoVal, cardThreeVal, cardFourVal, cardFiveVal].sort(sortNumber);    
 
-    highCard += exsistingValue
-    return { 'value': highCard, 'name': handName } ;
+    let highCard = exsistingValue + orderedHandArr[0];
+    return { 'value': highCard, 'name': handName };
 }
 
 const checkForPair = function(hand, numberOfMatches) {
@@ -219,13 +213,13 @@ const checkForPair = function(hand, numberOfMatches) {
             i !== 4 &&
             i !== 6 &&
             i !== 6 
-        ){} else {
-            let card = handArr[i];
-            let regExCard = new RegExp(card,"g");
+        ) {continue;}
 
-            if(hand.match(regExCard).length === numberOfMatches) {
-                return true;
-            }
+        let card = handArr[i];
+        let regExCard = new RegExp(card,"g");
+
+        if(hand.match(regExCard).length === numberOfMatches) {
+            return true;
         }
     }
 
@@ -242,30 +236,32 @@ const checkForMultiplePairs = function(hand, twoOrFullHouse) {
             i !== 4 &&
             i !== 6 &&
             i !== 6 
-            ){} else {
-                let card = handArr[i];
-                let regExCard = new RegExp(card,"g");
+            ) {continue;}
 
-                if(hand.match(regExCard).length === twoOrFullHouse) {
-                    for (let i = 0; i < handArr.length; i++) {
-                        let secondCard = handArr[i];
-                        if (
-                            i !== 0 &&
-                            i !== 2 &&
-                            i !== 4 &&
-                            i !== 6 &&
-                            i !== 6 
-                            ){} else if (secondCard === card) {
+            let card = handArr[i];
+            let regExCard = new RegExp(card,"g");
 
-                        } else {
-                            let secondRegExCard = new RegExp(secondCard,"g");
+            if(hand.match(regExCard).length === twoOrFullHouse) {
+                for (let i = 0; i < handArr.length; i++) {
+                    let secondCard = handArr[i];
+                    if (
+                        i !== 0 &&
+                        i !== 2 &&
+                        i !== 4 &&
+                        i !== 6 &&
+                        i !== 6 
+                        ) {continue;} 
 
-                            if(hand.match(secondRegExCard).length === 2) {
-                                return true;
-                            }
+                        if (secondCard === card) {
+                            continue;
+                        }
+
+                        let secondRegExCard = new RegExp(secondCard,"g");
+
+                        if(hand.match(secondRegExCard).length === 2) {
+                            return true;
                         }
                     }
-                }
             }
     }
 
@@ -282,16 +278,58 @@ const assignPairValue = function(hand, numberOfMatches, multiplier) {
             i !== 4 &&
             i !== 6 &&
             i !== 6 
-        ){} else {
+        ) {continue;}
+
+        let card = handArr[i];
+        let regExCard = new RegExp(card,"g");
+
+        if(hand.match(regExCard).length === numberOfMatches) {
+            let pairValue = hand.match(regExCard)[0];
+            return cardValues(pairValue) * multiplier;
+        }
+    }
+}
+
+const assignMultiplePairsValue = function(hand, twoOrFullHouse) {
+    let handArr = hand.split('');
+
+    for (let i = 0; i < handArr.length; i++) {
+        if (
+            i !== 0 &&
+            i !== 2 &&
+            i !== 4 &&
+            i !== 6 &&
+            i !== 6 
+            ) {continue;}
+
             let card = handArr[i];
             let regExCard = new RegExp(card,"g");
 
-            if(hand.match(regExCard).length === numberOfMatches) {
-                let pairValue = hand.match(regExCard)[0];
-                return cardValues(pairValue) * multiplier;
+            if(hand.match(regExCard).length === twoOrFullHouse) {
+                for (let i = 0; i < handArr.length; i++) {
+                    let secondCard = handArr[i];
+                    if (
+                        i !== 0 &&
+                        i !== 2 &&
+                        i !== 4 &&
+                        i !== 6 &&
+                        i !== 6 
+                        ) {continue;} 
+
+                        if (secondCard === card) {
+                            continue;
+                        }
+
+                        let secondRegExCard = new RegExp(secondCard,"g");
+
+                        if(hand.match(secondRegExCard).length === 2) {
+                            return true;
+                        }
+                    }
             }
-        }
     }
+
+    return false;
 }
 
 const cardValues = function(card) {
