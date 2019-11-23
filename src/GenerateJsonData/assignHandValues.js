@@ -448,7 +448,3 @@ const cardValues = function(card) {
         return 1;
     }
 }
-
-for (let i = 0; i < samples.length; i++) {
-    console.log(this.assignHandValue(samples[i]));
-}
