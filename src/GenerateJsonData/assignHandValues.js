@@ -13,51 +13,51 @@ const samples = [
 
 exports.assignHandValue = function(hand) {
     if (isForRoyalFlush(hand)) {
-        return { 'value': 100000000000, 'name': 'royal flush' }
+        return { 'value': 100000000000 }
     }
 
     if (isStraightFlush(hand)) {
-        return findHighCard(hand, 90000000000, "straight flush");
+        return findHighCard(hand, 90000000000);
     }
 
     if (isFourOfAKind(hand)) {
         let value = 80000000000;
         let pairValue = assignPairValue(hand, 4, 100) + value;
-        return findHighCard(hand, pairValue, "four of a kind");
+        return findHighCard(hand, pairValue);
     }
 
     if (isFullHouse(hand)) {
         let value = 70000000000;
         let threePairValue = assignPairValue(hand, 3, 10000) + value;
-        return { 'value': assignPairValue(hand, 2, 100) + threePairValue, 'name': 'full house' };
+        return { 'value': assignPairValue(hand, 2, 100) + threePairValue};
     }
 
     if (isAFlush(hand)) {
         let value = 60000000000;
-        return { 'value': assignMultipleCardValues(hand, "none", ) + value, 'name': 'flush' };
+        return { 'value': assignMultipleCardValues(hand, 'none', ) + value };
     }
 
     if (isAStaight(hand)) {
-        return findHighCard(hand, 50000000000, "straight");
+        return findHighCard(hand, 50000000000);
     }
 
     if (isThreeOfAKind(hand)) {
         let value = 40000000000;
-        return { 'value': returnPairValue(hand, 3, value), 'name': 'three of a kind' };
+        return { 'value': returnPairValue(hand, 3, value) };
     }
 
     if (isTwoPair(hand)) {
         let value = 30000000000;
-        return {  'value': returnTwoPairValue(hand) + value, 'name': 'two pair' }
+        return {  'value': returnTwoPairValue(hand) + value }
     }
 
     if (isOnePair(hand)) {
         let value = 20000000000;
-        return { 'value': returnPairValue(hand, 2, value), 'name': 'pair' };
+        return { 'value': returnPairValue(hand, 2, value) };
     }
 
     let value = 10000000000;
-    return { 'value': assignMultipleCardValues(hand, "none") + value, 'name': 'high card' };
+    return { 'value': assignMultipleCardValues(hand, 'none') + value };
 }
 
 const isForRoyalFlush = function(hand) {
@@ -170,7 +170,7 @@ const isOnePair = function(hand) {
     return checkForPair(hand, 2);
 }
 
-const findHighCard = function(hand, exsistingValue, handName) {
+const findHighCard = function(hand, exsistingValue) {
     let handArr = hand.split('');
     let cardOneVal = cardValues(handArr[0]);
     let cardTwoVal = cardValues(handArr[2]);
@@ -184,7 +184,7 @@ const findHighCard = function(hand, exsistingValue, handName) {
     
     let orderedHandArr = [cardOneVal, cardTwoVal, cardThreeVal, cardFourVal, cardFiveVal].sort(sortNumber);
     let highCard = exsistingValue + orderedHandArr[0];
-    return { 'value': highCard, 'name': handName };
+    return { 'value': highCard };
 }
 
 const checkForPair = function(hand, numberOfMatches) {
@@ -454,8 +454,4 @@ const cardValues = function(card) {
     if (card === '2') {
         return 1;
     }
-}
-
-for (let i = 0; i < samples.length; i++) {
-    console.log(this.assignHandValue(samples[i]));
 }

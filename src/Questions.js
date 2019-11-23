@@ -34,7 +34,7 @@ class Questions {
     }
 
     howDoYouWantToPlay(yesFunction, noFunction) {
-        rl.question('Last question, Do you want to play with the hands.txt file? (y/n): ', (answer) => {
+        rl.question('Last question, Do you want to play with the file? (y/n): ', (answer) => {
             if (answer !== 'y' && answer !== 'n' ) {
                 console.log(`${answer} is not an acceptable answer. Please try with a y (for yes) or n for (no).`);
                 return questions.howDoYouWantToPlay(yesFunction, noFunction);
