@@ -9,16 +9,6 @@ const samples = [
     '7D7S5D5SAC',
     '5C5D6DAC9C',
     '7C5H8DTDKS',
-    '7C5H8DTDKS',
-    '5C5D6DAC9C',
-    '7D7S5D5SAC',
-    '8C8SKC8H4S',
-    '6H7D8S9CTH',
-    '4H8H2H5H9H',
-    '8H6S6D6H8D',
-    '2H7D2S2D2C',
-    '9SKSQSJSTS',
-    'AHKHQHJHTH'
 ]
 
 exports.assignHandValue = function(hand) {
@@ -58,8 +48,7 @@ exports.assignHandValue = function(hand) {
 
     if (isTwoPair(hand)) {
         let value = 30000000000;
-        //find card value of pair, second pair and high card
-        return findHighCard(hand, value, "two pair");
+        return {  'value': returnTwoPairValue(hand) + value, 'name': 'two pair' }
     }
 
     if (isOnePair(hand)) {
@@ -357,6 +346,72 @@ const returnPairValue = function(hand, numberOfMatches, value) {
     }
 
     return assignMultipleCardValues(hand, excludeCards) + value;
+}
+
+const returnTwoPairValue = function(hand) {
+    let handArr = hand.split('');
+    let firstPairValue = 0;
+    let secondPairValue = 0;
+    let value = 0;
+    let cardOneVal = cardValues(handArr[0]);
+    let cardTwoVal = cardValues(handArr[2]);
+    let cardThreeVal = cardValues(handArr[4]);
+    let cardFourVal = cardValues(handArr[6]);
+    let cardFiveVal = cardValues(handArr[8]);
+
+    let cardsWithoutSewtsArr = [cardOneVal, cardTwoVal, cardThreeVal, cardFourVal, cardFiveVal];
+
+    for (let i = 0; i < handArr.length; i++) {
+        if (
+            i !== 0 &&
+            i !== 2 &&
+            i !== 4 &&
+            i !== 6 &&
+            i !== 6 
+            ) {continue;}
+
+            let card = handArr[i];
+            let regExCard = new RegExp(card,"g");
+
+            if(hand.match(regExCard).length === 2) {
+                for (let i = 0; i < handArr.length; i++) {
+                    let secondCard = handArr[i];
+                    if (
+                        i !== 0 &&
+                        i !== 2 &&
+                        i !== 4 &&
+                        i !== 6 &&
+                        i !== 6 
+                        ) {continue;} 
+
+                        if (secondCard === card) {
+                            continue;
+                        }
+
+                        let secondRegExCard = new RegExp(secondCard,"g");
+
+                        if(hand.match(secondRegExCard).length === 2) {
+                            firstPairValue = cardValues(hand.match(regExCard)[0]);
+                            secondPairValue = cardValues(hand.match(secondRegExCard)[0]);
+                        }
+                    }
+            }
+    }
+
+    if (firstPairValue > secondPairValue) {
+        value += (firstPairValue * 10000) + (secondPairValue * 100);
+    } else {
+        value += (secondPairValue * 10000) + (firstPairValue * 100);
+    }
+
+    let tempArr = cardsWithoutSewtsArr.filter(
+        function(a) {
+            return a !== firstPairValue && a !== secondPairValue;
+    });
+
+    let highCard = cardValues(tempArr[0]);
+
+    return value += highCard;
 }
 
 const cardValues = function(card) {
