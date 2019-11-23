@@ -409,7 +409,7 @@ const returnTwoPairValue = function(hand) {
             return a !== firstPairValue && a !== secondPairValue;
     });
 
-    let highCard = cardValues(tempArr[0]);
+    let highCard = tempArr[0];
 
     return value += highCard;
 }
