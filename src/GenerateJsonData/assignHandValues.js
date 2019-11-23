@@ -1,14 +1,9 @@
 const samples = [
-    'AHKHQHJHTH',
-    '9SKSQSJSTS',
-    '2H7D2S2D2C',
-    '8H6S6D6H8D',
-    '4H8H2H5H9H',
-    '6H7D8S9CTH',
-    'QCQSKCQH4S',
-    '7D7S5D5SAC',
-    '5C5D6DAC9C',
-    '7C5H8DTDKS',
+    '5HKS9C7D9H', 
+    '8D3S5D5CAH',
+    '3DKHQD6C6S',
+    'ADAS8H2HQS'
+
 ]
 
 exports.assignHandValue = function(hand) {
@@ -341,11 +336,9 @@ const returnPairValue = function(hand, numberOfMatches, value) {
 
         if(hand.match(regExCard).length === numberOfMatches) {
             excludeCards = card;
-            value += assignPairValue(hand, numberOfMatches, 100000000);
+            return assignMultipleCardValues(hand, excludeCards) + assignPairValue(hand, numberOfMatches, 100000000) + value;
         }
     }
-
-    return assignMultipleCardValues(hand, excludeCards) + value;
 }
 
 const returnTwoPairValue = function(hand) {
@@ -454,4 +447,8 @@ const cardValues = function(card) {
     if (card === '2') {
         return 1;
     }
+}
+
+for (let i = 0; i < samples.length; i++) {
+    console.log(this.assignHandValue(samples[i]));
 }

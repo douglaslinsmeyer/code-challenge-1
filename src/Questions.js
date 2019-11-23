@@ -41,10 +41,13 @@ class Questions {
             }
 
             if (answer === 'y') {
-                return yesFunction();
+                yesFunction();
+                rl.close();
+                return;
             }
             
-            return noFunction();
+            noFunction();
+            rl.close();
         });
     }
 

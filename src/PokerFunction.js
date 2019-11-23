@@ -37,18 +37,22 @@ class PokerFunction {
         const handOneObject = functionChoice(handOne);
         const handTwoObject = functionChoice(handTwo);
 
-        if (handOneObject.value > handTwoObject.value) {
-            console.log(`\n${playerOne} wins`);
-            return `${playerOne}: ${wins.playerOneWins++} wins || ${playerTwo}: ${wins.playerTwoWins} wins`;
-        }
-        
-        if (handOneObject.value < handTwoObject.value) {
-            console.log(`\n${playerTwo} wins`);
-            return `${playerOne}: ${wins.playerOneWins} wins || ${playerTwo}: ${wins.playerTwoWins++} wins`;
-        }
+        console.log(handOne + " | " + handTwo);
+        console.log(handOneObject.value + " > " + handTwoObject.value);
+        return handOneObject.value > handTwoObject.value;
 
-        console.log(`\n${playerOne} and ${playerTwo} tie`);
-        return `${playerOne}: ${wins.playerOneWins} wins || ${playerTwo}: ${wins.playerTwoWins} wins`;
+        // if (handOneObject.value > handTwoObject.value) {
+        //     console.log(`\n${playerOne} wins`);
+        //     return `${playerOne}: ${wins.playerOneWins++} wins || ${playerTwo}: ${wins.playerTwoWins} wins`;
+        // }
+        
+        // if (handOneObject.value < handTwoObject.value) {
+        //     console.log(`\n${playerTwo} wins`);
+        //     return `${playerOne}: ${wins.playerOneWins} wins || ${playerTwo}: ${wins.playerTwoWins++} wins`;
+        // }
+
+        // console.log(`\n${playerOne} and ${playerTwo} tie`);
+        // return `${playerOne}: ${wins.playerOneWins} wins || ${playerTwo}: ${wins.playerTwoWins} wins`;
     }
 
     lookupTable(hand){
