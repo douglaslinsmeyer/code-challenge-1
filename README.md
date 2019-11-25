@@ -1,8 +1,16 @@
 # My Branch Notes
 
-* Ensure you have Node installed on your machine
-* To start the app run "node app.js -f hands.txt"
-    * 
+**To run program**
+1. Ensure you have Node installed on your machine
+1. run in shell "node app.js -f hands.txt"
+1. Answer the questions you are prompted as you wish
+
+**About my solution**
+* I chose to build a static JSON obect(s) of every possible hand combination. So when a user runs the app instead of running the algorithm for every hand. Under src/GenerateJsonData I have 3 files, one for generating all the possible hand combinations. Another for assigning the value of each hand. And one fir finding and replacing some stuff to format the JSON appropriatly. 
+
+* There are 2652 json files and each have bout 150,000 different hand conbinations. When running the scripts to generate everything, I had to do batches of 100 so that node would not time out.
+
+* Enjoy!
 
 # The Challenge
 
